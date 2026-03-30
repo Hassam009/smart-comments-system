@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+
 # Smart Comments App (FastAPI + React)
 
-## 📌 Overview
+## Overview
 
 This project is a minimal full-stack "Smart Comments" system built using **FastAPI (backend)** and **React (frontend)**.
 
@@ -14,7 +14,7 @@ It allows users to:
 
 ---
 
-## 🧠 Key Features
+## Key Features
 
 ### Backend (FastAPI)
 
@@ -33,7 +33,7 @@ It allows users to:
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
 ### Backend
 
@@ -52,22 +52,8 @@ It allows users to:
 
 ---
 
-## 🧱 Project Structure (Backend)
 
-```
-app/
-├── api/            # API routes
-├── core/           # Config and settings
-├── db/             # Database connection
-├── models/         # SQLAlchemy models
-├── schemas/        # Pydantic schemas
-├── services/       # Business logic + classifier
-└── main.py         # Entry point
-```
-
----
-
-## 🔁 Comment Classification Flow
+## Comment Classification Flow
 
 1. User submits a comment
 2. Backend receives request
