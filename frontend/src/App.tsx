@@ -4,10 +4,6 @@ import PostDetails from './pages/PostDetails';
 import Moderator from './pages/Moderator';
 import { Shield, Layout } from 'lucide-react';
 
-/**
- * Main application component with React Router for navigation.
- * Implements a global navbar and a standard container layout.
- */
 function App() {
   return (
     <Router>

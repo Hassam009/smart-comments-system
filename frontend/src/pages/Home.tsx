@@ -4,19 +4,12 @@ import { postsService } from '../services/api';
 import type { Post } from '../types';
 import { BookOpen, User } from 'lucide-react';
 
-/**
- * The homepage shows a list of blog posts in a grid.
- * Each post is represented as a clickable card.
- */
 const Home = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        /**
-         * Fetches all posts from the backend on component mount.
-         */
         const fetchPosts = async () => {
             try {
                 const data = await postsService.getAll();

@@ -5,15 +5,12 @@ from app.api.v1.routers import posts, comments
 from app.db.sessions import engine
 from app.db.base import Base
 
-# Important: Import models so Base metadata is aware of them
 import app.models.post
 import app.models.comment
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize the database conditionally (for Dev purposes, we'll create all)
     async with engine.begin() as conn:
-        # Create all tables
         await conn.run_sync(Base.metadata.create_all)
     yield
 

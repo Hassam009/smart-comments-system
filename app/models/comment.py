@@ -13,5 +13,4 @@ class Comment(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     flagged = Column(Boolean, default=False, nullable=False)
 
-    # Relationship back to post
     post = relationship("Post", back_populates="comments")

@@ -3,18 +3,11 @@ import { moderatorService } from '../services/api';
 import type { Comment } from '../types';
 import { Shield, AlertTriangle, User, MessageCircle } from 'lucide-react';
 
-/**
- * Moderator View: Displays all comments that have been flagged by the backend.
- * Provides a specialized dashboard for quick review of pending content.
- */
 const Moderator = () => {
     const [flaggedComments, setFlaggedComments] = useState<Comment[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        /**
-         * Fetch all flagged comments on page load.
-         */
         const fetchFlagged = async () => {
             try {
                 const data = await moderatorService.getFlaggedComments();
@@ -28,9 +21,6 @@ const Moderator = () => {
         fetchFlagged();
     }, []);
 
-    /**
-     * Handles marking a comment as "safe".
-     */
     const handleApprove = async (id: number) => {
         try {
             await moderatorService.approveComment(id);
@@ -41,9 +31,6 @@ const Moderator = () => {
         }
     };
 
-    /**
-     * Handles deleting a comment entirely.
-     */
     const handleDelete = async (id: number) => {
         if (!window.confirm('Are you sure you want to delete this comment?')) return;
         

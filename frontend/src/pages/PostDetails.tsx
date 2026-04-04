@@ -4,27 +4,18 @@ import { postsService } from '../services/api';
 import type { Post, Comment, CommentCreate } from '../types';
 import { ChevronLeft, MessageSquare, AlertTriangle, Send } from 'lucide-react';
 
-/**
- * Shows full post content, existing comments, and a comment submission form.
- * Flagged comments are visually highlighted with a badge.
- */
 const PostDetails = () => {
     const { id } = useParams<{ id: string }>();
     const [post, setPost] = useState<Post | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
-
-    // Form state
     const [formData, setFormData] = useState<CommentCreate>({
         author: '',
         text: ''
     });
 
     useEffect(() => {
-        /**
-         * Fetch post data and comments once on page load.
-         */
         const fetchPost = async () => {
             if (!id) return;
             try {
@@ -40,10 +31,6 @@ const PostDetails = () => {
         fetchPost();
     }, [id]);
 
-    /**
-     * Handles adding a new comment.
-     * The backend will automatically classify the comment as 'safe' or 'needs_review'.
-     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!id || !formData.author || !formData.text) return;
@@ -51,9 +38,7 @@ const PostDetails = () => {
         setSubmitting(true);
         try {
             const newComment = await postsService.addComment(Number(id), formData);
-            // Append the new comment to the list
             setComments([...comments, newComment]);
-            // Clear form
             setFormData({ author: '', text: '' });
         } catch (error) {
             console.error('Failed to add comment:', error);
@@ -78,8 +63,6 @@ const PostDetails = () => {
                     {post.body}
                 </div>
             </article>
-
-            {/* Comments Section */}
             <section>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
                     <MessageSquare className="text-primary" />
@@ -121,8 +104,6 @@ const PostDetails = () => {
                         </p>
                     )}
                 </div>
-
-                {/* Comment Input Form */}
                 <form onSubmit={handleSubmit} style={{ marginTop: '4rem' }}>
                     <h3 style={{ marginBottom: '1rem' }}>Leave a comment</h3>
                     <input
