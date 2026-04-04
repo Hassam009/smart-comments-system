@@ -1,8 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List, Optional
-
-# Forward declare CommentRead if needed, or we import later
 from app.schemas.comment import CommentRead
 
 class PostBase(BaseModel):
@@ -13,9 +11,13 @@ class PostCreate(PostBase):
     pass
 
 class PostRead(PostBase):
+    """Simple view for summaries and lists."""
     id: int
     created_at: datetime
-    comments: List[CommentRead] = []
 
     class Config:
         from_attributes = True
+
+class PostReadDetail(PostRead):
+    """Detailed view including all comments."""
+    comments: List[CommentRead] = []
