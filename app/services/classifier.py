@@ -1,27 +1,50 @@
 import re
+import google.generativeai as genai
+from app.config import settings
 
-# List of toxic/spam keywords for rule-based classification
-# In a real-world scenario, you might use a more advanced model like Hugging Face or OpenAI.
+
 TOXIC_KEYWORDS = [
     r"\bidiot\b", r"\bstupid\b", r"\bspam\b", r"\bclick here\b", r"\bbuy now\b",
     r"\bfree money\b", r"\bugh\b", r"\bhate\b"
 ]
 
-def classify_text(text: str) -> str:
-    """
-    Classifies a piece of text as 'safe' or 'needs_review'.
-    
-    This function uses a simple keyword matching approach.
-    - If any of the toxic keywords are found in the text, it marks it as 'needs_review'.
-    - Otherwise, it's marked as 'safe'.
-    """
-    # Normalize text to lowercase for consistent matching
+
+genai.configure(api_key=settings.GEMINI_API_KEY)
+model = genai.GenerativeModel('gemini-flash-latest')
+
+async def classify_text(text: str) -> str:
+    """Classifies text as 'safe' or 'needs_review' using a hybrid AI approach."""
+   
     text_lower = text.lower()
-    
     for pattern in TOXIC_KEYWORDS:
         if re.search(pattern, text_lower):
-            # If any pattern matches, flag the comment
             return "needs_review"
-    
-    # No matches found, so it's safe
-    return "safe"
+
+   
+    try:
+        if not settings.GEMINI_API_KEY or "your_gemini" in settings.GEMINI_API_KEY:
+             return "safe"
+
+        prompt = (
+            "You are a STRICT comment moderation assistant. Classify the following comment as "
+            "either 'safe' or 'needs_review'.\n\n"
+            "CRITERIA FOR 'needs_review':\n"
+            "- HARASSMENT: Any personal attacks, insults, or mean-spirited comments.\n"
+            "- WISHING HARM: Wishing failure, harm, or death on others.\n"
+            "- TOXICITY: Any inflammatory behavior.\n"
+            "- SPAM: Obvious promotional content.\n\n"
+            "CRITERIA FOR 'safe':\n"
+            "- Constructive feedback and polite disagreement only.\n\n"
+            f"Comment: \"{text}\"\n"
+            "Respond with ONLY the word 'safe' or 'needs_review'."
+        )
+        
+        response = await model.generate_content_async(prompt)
+        result = response.text.strip().lower()
+
+        if "needs_review" in result:
+            return "needs_review"
+        return "safe"
+
+    except Exception:
+        return "safe"

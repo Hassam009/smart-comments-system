@@ -4,7 +4,7 @@ from app.services.classifier import classify_text
 from app.schemas.comment import CommentCreate
 
 async def create_new_comment(db: AsyncSession, post_id: int, comment_data: CommentCreate):
-    classification_result = classify_text(comment_data.text)
+    classification_result = await classify_text(comment_data.text)
     
     flagged = classification_result == "needs_review"
     
